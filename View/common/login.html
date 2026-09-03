@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - CampusNest</title>
+
+    <link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+
+<body>
+
+
+<header class="nest-topbar">
+
+    <a href="../index.html" class="nest-brand">
+        CampusNest
+    </a>
+
+</header>
+
+
+<main class="auth-container">
+
+    <div class="auth-card">
+
+        <h1 class="auth-title">
+            Login
+        </h1>
+
+
+        <form action="../../Controller/login.php" method="POST" novalidate>
+
+            <div class="nest-field">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    >
+
+            </div>
+
+
+            <div class="nest-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    >
+
+            </div>
+
+
+            <div style="margin-top:15px;">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="width:100%;">
+                    Login
+                </button>
+
+            </div>
+            
+
+            <div class="remember-me">
+
+            <input
+                type="checkbox"
+                id="rememberme"
+                name="remember"
+                value="yes">
+
+            <label for="rememberme">
+                Remember me
+            </label>
+
+        </div>
+
+            <p class="auth-link">
+
+                <a href="forgot-password.html">
+                    Forgot Password?
+                </a>
+
+            </p>
+            
+
+        </form>
+        
+        <p class="auth-link">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Sign Up
+            </a>
+
+        </p>
+
+    </div>
+
+</main>
+
+    <script src="../assets/validation.js"></script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 15px;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.remember-me label {
+    margin: 0;
+    width: auto;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: Arial, sans-serif;
+}
+
+
+/* ================================
+   HEADER
+   ================================ */
+
+.nest-topbar {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    min-height: 65px;
+    padding: 12px 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nest-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 24px;
+    font-weight: bold;
+    color: #1b4332;
+}
+
+.nest-role-pill {
+    background-color: #1b4332;
+    color: white;
+
+    padding: 6px 14px;
+    border-radius: 20px;
+
+    font-size: 14px;
+}
+
+.nest-role-pill.gold {
+    background-color: #d9a441;
+    color: #222;
+}
+
+.nest-role-pill.line {
+    background-color: white;
+    color: #1b4332;
+    border: 1px solid #1b4332;
+}
+
+
+/* ================================
+   MAIN PAGE
+   ================================ */
+
+.nest-page {
+    padding: 40px 20px;
+}
+
+.nest-shell {
+    max-width: 900px;
+    margin: auto;
+}
+
+.nest-eyebrow {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.nest-heading {
+    color: #1b4332;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.nest-heading em {
+    color: #d9a441;
+    font-style: normal;
+}
+
+.nest-sub {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+
+/* ================================
+   CARD
+   ================================ */
+
+.nest-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.nest-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.nest-card-title {
+    color: #1b4332;
+    font-size: 20px;
+}
+
+.nest-card-hint {
+    color: #777;
+    font-size: 13px;
+}
+
+
+/* ================================
+   FORMS
+   ================================ */
+
+.nest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.nest-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.nest-field label,
+legend {
+    font-weight: bold;
+    color: #333;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #bbb;
+    border-radius: 4px;
+
+    background-color: white;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #1b4332;
+}
+
+.nest-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+fieldset {
+    border: none;
+}
+
+legend {
+    margin-bottom: 10px;
+}
+
+
+/* ================================
+   BUTTONS
+   ================================ */
+
+.nest-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.btn {
+    display: inline-block;
+
+    border: none;
+    border-radius: 4px;
+
+    padding: 11px 20px;
+
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-primary {
+    background-color: #1b4332;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #143426;
+}
+
+.btn-ghost {
+    background-color: #eee;
+    color: #222;
+}
+
+.btn-gold {
+    background-color: #d9a441;
+    color: #222;
+}
+
+.btn-danger {
+    background-color: #c0392b;
+    color: white;
+}
+
+
+/* ================================
+   RADIO / CHECKBOX CHIPS
+   ================================ */
+
+.nest-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nest-chip input {
+    display: none;
+}
+
+.nest-chip label {
+    display: block;
+
+    border: 1px solid #bbb;
+    border-radius: 4px;
+
+    padding: 9px 15px;
+
+    cursor: pointer;
+    background-color: white;
+}
+
+.nest-chip input:checked + label {
+    background-color: #1b4332;
+    color: white;
+    border-color: #1b4332;
+}
+
+
+/* ================================
+   INFORMATION LIST
+   ================================ */
+
+.nest-info-list {
+    margin-bottom: 20px;
+}
+
+.nest-info-list div {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid #eee;
+}
+
+.nest-info-list dt {
+    font-weight: bold;
+    color: #666;
+}
+
+.nest-info-list dd {
+    color: #222;
+}
+
+
+/* ================================
+   BADGES / STATUS
+   ================================ */
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 4px;
+
+    font-size: 13px;
+}
+
+.badge-available {
+    background-color: #d8f3dc;
+    color: #1b4332;
+}
+
+.badge-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-flag {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+
+/* ================================
+   HOME PAGE
+   ================================ */
+
+.hero {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url("../Images/marcus-loke-WQJvWU_HZFo-unsplash.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    max-width: 600px;
+    margin: 0 auto 25px;
+    color: #eee;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hero .btn-gold {
+    background-color: #d9a441;
+}
+
+
+/* ================================
+   PROPERTY CARDS
+   ================================ */
+
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.property-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.property-image {
+    height: 180px;
+
+    background-color: #ddd;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #777;
+}
+
+.property-content {
+    padding: 18px;
+}
+.property-image {
+    height: 180px;
+    background-color: #ddd;
+    overflow: hidden;
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.property-content h3 {
+    color: #1b4332;
+    margin-bottom: 8px;
+}
+
+.property-price {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.property-info {
+    color: #666;
+}
+
+
+/* ================================
+   LOGIN / REGISTER
+   ================================ */
+
+.auth-container {
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.auth-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 30px;
+}
+
+.auth-title {
+    text-align: center;
+    color: #1b4332;
+    margin-bottom: 25px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 18px;
+    color: #666;
+}
+
+.auth-link a {
+    color: #1b4332;
+    font-weight: bold;
+}
+
+
+/* ================================
+   PROFILE
+   ================================ */
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    background-color: #ddd;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 20px;
+
+    color: #777;
+}
+
+
+/* ================================
+   UPLOAD
+   ================================ */
+
+.upload-box {
+    border: 2px dashed #aaa;
+
+    padding: 30px;
+
+    text-align: center;
+
+    background-color: #fafafa;
+}
+
+
+/* ================================
+   TABLE
+   ================================ */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #1b4332;
+    color: white;
+}
+
+
+/* ================================
+   ADMIN DASHBOARD
+   ================================ */
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.stat-box {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    padding: 25px;
+
+    text-align: center;
+}
+
+.stat-box h3 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    color: #1b4332;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+
+/* ================================
+   FOOTER
+   ================================ */
+
+.footer {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+}
+
+
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 700px) {
+
+    .nest-topbar {
+        padding: 12px 20px;
+    }
+
+    .nest-row {
+        grid-template-columns: 1fr;
+    }
+
+    .property-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .nest-info-list div {
+        grid-template-columns: 1fr;
+        gap: 3px;
+    }
+
+    .nest-actions {
+        flex-wrap: wrap;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}

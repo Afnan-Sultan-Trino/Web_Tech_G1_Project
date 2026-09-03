@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up - CampusNest</title>
+
+    <link rel="stylesheet" href="../assets/styles.css">
+
+</head>
+
+<body>
+
+
+<header class="nest-topbar">
+
+    <a href="../index.html" class="nest-brand">
+        CampusNest
+    </a>
+
+</header>
+
+
+<main class="auth-container">
+
+    <div class="auth-card">
+
+        <h1 class="auth-title">
+            Sign Up
+        </h1>
+
+
+        <form action="../../Controller/register.php" method="POST" novalidate>
+
+
+            <div class="nest-field">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    name="name">
+
+            </div>
+
+
+            <div class="nest-field">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    name="email"
+                    >
+
+            </div>
+
+
+            <div class="nest-field">
+
+                <label>
+                    Register As
+                </label>
+
+
+                <div class="nest-chip-group">
+
+                    <div class="nest-chip">
+
+                        <input
+                            type="radio"
+                            id="seeker"
+                            name="role"
+                            value="seeker"
+                            checked>
+
+                        <label for="seeker">
+                            Seeker
+                        </label>
+
+                    </div>
+
+
+                    <div class="nest-chip">
+
+                        <input
+                            type="radio"
+                            id="lister"
+                            name="role"
+                            value="lister">
+
+                        <label for="lister">
+                            Lister
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="nest-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+               <input type="password" name="password" placeholder="Enter password"id="password">
+            </div>
+
+
+            <div class="nest-field">
+
+                <label for="confirm">
+                    Confirm Password
+                </label>
+
+                <input type="password" name="confirm" placeholder="Confirm password"id="confirm">
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+                style="width:100%;">
+                Create Account
+            </button>
+
+
+        </form>
+
+
+        <p class="auth-link">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</main>
+
+<script src="../assets/validation.js"></script>
+<script>
+window.addEventListener("pageshow", function () {
+
+    const form = document.querySelector("form");
+
+    if (form) {
+        form.reset();
+    }
+
+});
+</script>
+</body>
+</html>
