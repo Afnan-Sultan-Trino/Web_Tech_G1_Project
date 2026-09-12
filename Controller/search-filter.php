@@ -1,0 +1,153 @@
+<?php
+
+session_start();
+
+require("../Model/Listing.php");
+
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    die("Invalid request.");
+}
+
+
+// Get input
+
+$location = isset($_POST["location"])
+    ? trim($_POST["location"])
+    : "";
+
+$price = isset($_POST["price"])
+    ? trim($_POST["price"])
+    : "";
+
+if (isset($_POST["room_details"]) && is_array($_POST["room_details"])) {
+    $roomDetails = $_POST["room_details"];
+} else {
+    $roomDetails = [];
+}
+
+
+// Validation
+
+if (empty($location)) {
+    die("Please select a location.");
+}
+
+if (empty($price)) {
+    die("Please select a price range.");
+}
+
+if (empty($roomDetails)) {
+    die("Please select at least one room detail.");
+}
+
+
+// Price
+
+$priceParts = explode("-", $price);
+
+$minPrice = isset($priceParts[0])
+    ? (float)$priceParts[0]
+    : 0;
+
+$maxPrice = isset($priceParts[1])
+    ? (float)$priceParts[1]
+    : 999999999;
+
+
+// Search using Model
+
+$listings = searchListings(
+    $location,
+    $minPrice,
+    $maxPrice,
+    $roomDetails
+);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - CampusNest</title>
+    <link rel="stylesheet" href="../View/assets/styles.css">
+</head>
+
+<body>
+
+<header class="nest-topbar">
+    <a href="../View/index.php" class="nest-brand">CampusNest</a>
+    <span class="nest-role-pill line">Seeker</span>
+</header>
+
+<main class="nest-page">
+    <div class="nest-shell">
+
+        <h1 class="nest-heading">Search <em>Results</em></h1>
+        <p class="nest-sub">
+            Showing rooms in <?php echo htmlspecialchars($location); ?>
+            between ৳<?php echo number_format($minPrice); ?> and ৳<?php echo number_format($maxPrice); ?>.
+        </p>
+
+        <?php if (empty($listings)): ?>
+
+            <div class="nest-card">
+                <p>No listings matched your search. Try different filters.</p>
+                <a href="../View/seeker/search-filer.html" class="btn btn-ghost">Back to Search</a>
+            </div>
+
+        <?php else: ?>
+
+            <?php foreach ($listings as $listing): ?>
+
+                <div class="nest-card">
+
+                    <div class="nest-card-head">
+                        <h2 class="nest-card-title"><?php echo htmlspecialchars($listing["title"]); ?></h2>
+                        <span class="badge badge-available">Available</span>
+                    </div>
+
+                    <?php if (!empty($listing["image"])): ?>
+
+                        <div class="property-image">
+                            <img
+                                src="../View/Images/uploads/<?php echo htmlspecialchars($listing["image"]); ?>"
+                                alt="<?php echo htmlspecialchars($listing["title"]); ?>">
+                        </div>
+
+                    <?php endif; ?>
+
+                    <dl class="nest-info-list">
+                        <div>
+                            <dt>Location</dt>
+                            <dd><?php echo htmlspecialchars($listing["location"]); ?></dd>
+                        </div>
+                        <div>
+                            <dt>Rent</dt>
+                            <dd>৳<?php echo number_format($listing["price"]); ?> / month</dd>
+                        </div>
+                        <div>
+                            <dt>Lister</dt>
+                            <dd><?php echo htmlspecialchars($listing["lister_name"]); ?></dd>
+                        </div>
+                    </dl>
+
+                    <div class="nest-actions">
+                        <a href="../View/seeker/interest-request.php?id=<?php echo $listing["id"]; ?>" class="btn btn-primary">
+                            Express Interest
+                        </a>
+                    </div>
+
+                </div>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+    </div>
+</main>
+
+</body>
+</html>

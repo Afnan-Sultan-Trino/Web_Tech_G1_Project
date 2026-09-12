@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search & Filter - CampusNest</title>
+
+    <link rel="stylesheet" href="../assets/styles.css">
+
+    <style>
+        /* Additional styles for AJAX results */
+        #resultsContainer {
+            margin-top: 20px;
+        }
+        .listing-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .listing-item h3 { margin: 0 0 5px 0; }
+        .listing-item .price { color: #28a745; font-weight: bold; }
+        .listing-item .location { color: #6c757d; }
+        .listing-item .status { font-size: 14px; color: #666; }
+        .loading { color: #666; font-style: italic; padding: 20px; text-align: center; }
+        .error { color: #d9534f; padding: 10px; background: #f8d7da; border-radius: 5px; }
+        .no-results { color: #6c757d; text-align: center; padding: 30px; }
+        .results-count { padding: 10px 0; color: #333; font-weight: bold; }
+        .search-results-section {
+            margin-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header class="nest-topbar">
+    <a href="../index.html" class="nest-brand">
+        CampusNest
+    </a>
+    <span class="nest-role-pill line">
+        Seeker
+    </span>
+</header>
+
+<main class="nest-page">
+
+    <div class="nest-shell">
+
+        <p class="nest-eyebrow">
+            Seeker
+        </p>
+
+        <h1 class="nest-heading">
+            Filter <em>Settings</em>
+        </h1>
+
+        <p class="nest-sub">
+            Choose your preferred location, room details and price range.
+        </p>
+
+        <div class="nest-card">
+
+            <!-- 
+                ==============================================
+                FORM: Now uses AJAX instead of page reload
+                ==============================================
+            -->
+            <form id="filterForm" novalidate>
+
+                <!-- LOCATION -->
+                <div class="nest-field">
+                    <label for="location">
+                        Choose Your Location
+                    </label>
+                    <select id="location" name="location">
+                        <option value="">Select</option>
+                        <option value="Kuratoli">Kuratoli</option>
+                        <option value="Bashundhara">Bashundhara</option>
+                        <option value="Badda">Badda</option>
+                        <option value="Mohakhali">Mohakhali</option>
+                    </select>
+                </div>
+
+                <!-- ROOM DETAILS -->
+                <fieldset>
+                    <legend>Choose Room Details</legend>
+
+                    <div class="nest-chip-group">
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="single" name="room_details[]" value="single">
+                            <label for="single">Single Bed</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="master" name="room_details[]" value="master">
+                            <label for="master">Master Bed</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="partition" name="room_details[]" value="partition">
+                            <label for="partition">Partition</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="furnished" name="room_details[]" value="furnished">
+                            <label for="furnished">Furnished</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="not-furnished" name="room_details[]" value="not-furnished">
+                            <label for="not-furnished">Not Furnished</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="bachelor" name="room_details[]" value="bachelor">
+                            <label for="bachelor">Bachelor</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="family" name="room_details[]" value="family">
+                            <label for="family">Family</label>
+                        </div>
+
+                        <div class="nest-chip">
+                            <input type="checkbox" id="job-holder" name="room_details[]" value="job-holder">
+                            <label for="job-holder">Job Holder</label>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <!-- PRICE -->
+                <div class="nest-field">
+                    <label for="price">
+                        Price Range
+                    </label>
+                    <select id="price" name="price">
+                        <option value="">Select</option>
+                        <option value="8000-10000">8K - 10K</option>
+                        <option value="10000-12000">10K - 12K</option>
+                        <option value="12000-16000">12K - 16K</option>
+                    </select>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="nest-actions">
+                    <button type="submit" class="btn btn-primary" id="searchBtn">
+                        Search
+                    </button>
+                    <a href="seeker-dashboard.php" class="btn btn-ghost">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SEARCH RESULTS (AJAX will populate this)       -->
+        <!-- ============================================== -->
+        <div id="resultsContainer" class="search-results-section">
+            <div id="resultsCount"></div>
+            <div id="resultsList"></div>
+        </div>
+
+    </div>
+
+</main>
+
+<!--
+    ========================================================
+    AJAX JavaScript (XMLHttpRequest)
+    ========================================================
+-->
+<script>
+    // =====================================================
+    // GET Request: Filter Listings
+    // =====================================================
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop page reload
+
+        // Get all form values
+        const location = document.getElementById('location').value;
+        const roomDetails = document.querySelectorAll('input[name="room_details[]"]:checked');
+        const price = document.getElementById('price').value;
+
+        // Build URL with query parameters
+        let url = '../../Controller/ajax/filter-listings.php?';
+
+        if (location) {
+            url += 'location=' + encodeURIComponent(location) + '&';
+        }
+
+        // Handle room details (checkbox array)
+        if (roomDetails.length > 0) {
+            const values = [];
+            roomDetails.forEach(function(cb) {
+                values.push(cb.value);
+            });
+            url += 'room_details=' + encodeURIComponent(values.join(',')) + '&';
+        }
+
+        if (price) {
+            url += 'price=' + encodeURIComponent(price) + '&';
+        }
+
+        // Remove trailing & or ?
+        url = url.replace(/[&?]$/, '');
+
+        // Show loading state
+        const resultsList = document.getElementById('resultsList');
+        const resultsCount = document.getElementById('resultsCount');
+        resultsList.innerHTML = '<div class="loading">Searching for listings...</div>';
+        resultsCount.innerHTML = '';
+
+        // Make AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const data = xhr.response;
+
+                if (data.error) {
+                    resultsList.innerHTML = '<div class="error">' + data.error + '</div>';
+                    return;
+                }
+
+                if (data.results.length === 0) {
+                    resultsList.innerHTML = '<div class="no-results">No listings found matching your criteria.</div>';
+                    resultsCount.innerHTML = '';
+                    return;
+                }
+
+                // Show count
+                resultsCount.innerHTML = 'Found <strong>' + data.results.length + '</strong> listing(s)';
+
+                // Build results HTML
+                let html = '';
+                data.results.forEach(function(listing) {
+                    const statusClass = listing.status === 'available' ? '✅ Available' : '⏳ ' + listing.status;
+                    html += `
+                        <div class="listing-item">
+                            <h3>${listing.title}</h3>
+                            <p class="location">📍 ${listing.location}</p>
+                            ${listing.description ? '<p>' + listing.description + '</p>' : ''}
+                            <p class="price">💲 ${listing.price} BDT</p>
+                            ${listing.contact ? '<p>📞 ' + listing.contact + '</p>' : ''}
+                            <p class="status">Status: ${statusClass}</p>
+                        </div>
+                    `;
+                });
+                resultsList.innerHTML = html;
+            } else {
+                resultsList.innerHTML = '<div class="error">Error loading listings. Please try again.</div>';
+            }
+        };
+
+        xhr.onerror = function() {
+            resultsList.innerHTML = '<div class="error">Network error occurred.</div>';
+        };
+
+        xhr.send();
+    });
+
+    // Optional: Load all listings when page loads (uncomment to enable)
+    // window.addEventListener('DOMContentLoaded', function() {
+    //     document.getElementById('searchBtn').click();
+    // });
+</script>
+
+</body>
+</html>
