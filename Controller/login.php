@@ -2,6 +2,8 @@
 
 session_start();
 
+require("../Model/User.php");
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../View/common/login.html");
     exit();
@@ -9,6 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
 $password = isset($_POST["password"]) ? $_POST["password"] : "";
+
+
+// Validation
 
 if (empty($email)) {
     header("Location: ../View/common/login.html?error=email_required");
@@ -20,48 +25,46 @@ if (empty($password)) {
     exit();
 }
 
-require("../Model/db.php");
 
-$sql = "SELECT * FROM users WHERE email = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "s", $email);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+// Get user from Model
 
-if (mysqli_num_rows($result) === 0) {
+$user = loginUser($email);
 
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-
+if ($user === false) {
     header("Location: ../View/common/login.html?error=email_not_found");
     exit();
 }
 
-$user = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
 
-if ($password !== $user["password"]) {
- 
-    mysqli_close($conn);
- 
+// Check password
+
+if (
+    !password_verify($password, $user["password"]) &&
+    !hash_equals($user["password"], $password)
+) {
     header("Location: ../View/common/login.html?error=wrong_password");
     exit();
 }
 
 
+// Check account status
+
 if ($user["status"] === "suspended") {
-
-    mysqli_close($conn);
-
     header("Location: ../View/common/login.html?error=account_suspended");
     exit();
 }
+
+
+// Create session
 
 $_SESSION["logged_in"] = true;
 $_SESSION["user_id"] = $user["id"];
 $_SESSION["name"] = $user["name"];
 $_SESSION["email"] = $user["email"];
 $_SESSION["role"] = $user["role"];
+
+
+// Remember me
 
 if (isset($_POST["remember"])) {
 
@@ -73,7 +76,8 @@ if (isset($_POST["remember"])) {
     );
 }
 
-mysqli_close($conn);
+
+// Redirect according to role
 
 if ($_SESSION["role"] === "lister") {
 
@@ -86,7 +90,6 @@ if ($_SESSION["role"] === "lister") {
 } else {
 
     header("Location: ../View/seeker/seeker-dashboard.php");
-
 }
 
 exit();

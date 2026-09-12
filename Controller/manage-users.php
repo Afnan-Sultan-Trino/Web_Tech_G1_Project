@@ -35,29 +35,18 @@ if (
     die("Invalid user action.");
 }
 
-require("../Model/db.php");
+require("../Model/User.php");
 
 if ($action === "delete") {
 
-    $sql = "DELETE FROM users WHERE id = ? AND role != 'admin'";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $userId);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    deleteUser($userId);
 
 } else {
 
     $newStatus = $action === "activate" ? "active" : "suspended";
 
-    $sql = "UPDATE users SET status = ? WHERE id = ? AND role != 'admin'";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "si", $newStatus, $userId);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
+    updateUserStatus($userId, $newStatus);
 }
-
-mysqli_close($conn);
 
 header("Location: ../View/admin/manage-users.php");
 exit();

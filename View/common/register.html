@@ -32,6 +32,8 @@
             Sign Up
         </h1>
 
+        <p id="register-error" class="error-message" style="color:red;"></p>
+
 
         <form action="../../Controller/register.php" method="POST" novalidate>
 
@@ -159,15 +161,36 @@
 
 <script src="../assets/validation.js"></script>
 <script>
-window.addEventListener("pageshow", function () {
+const errorMessages = {
+    name_required: "Please enter your name.",
+    name_length: "Name must contain at least 3 characters.",
+    email_required: "Please enter your email.",
+    email_space: "Email cannot contain spaces.",
+    email_at: "Enter a valid email address.",
+    email_username: "Enter a valid email address.",
+    email_multiple_at: "Email can contain only one @.",
+    email_dot: "Email must contain a dot after @.",
+    email_format: "Invalid email format.",
+    email_end: "Email cannot end with a dot.",
+    email_exists: "An account already exists with this email.",
+    password_required: "Please enter your password.",
+    password_length: "Password must contain at least 6 characters.",
+    confirm_required: "Please confirm your password.",
+    password_match: "Passwords do not match.",
+    role_required: "Please select a role.",
+    invalid_role: "Please select a valid role."
+};
 
-    const form = document.querySelector("form");
+const error = new URLSearchParams(window.location.search).get("error");
+const errorElement = document.getElementById("register-error");
 
-    if (form) {
-        form.reset();
-    }
+if (errorElement && errorMessages[error]) {
+    errorElement.textContent = errorMessages[error];
+}
 
-});
+if (error) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
 </script>
 </body>
 </html>

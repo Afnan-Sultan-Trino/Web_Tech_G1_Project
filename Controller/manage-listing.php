@@ -35,44 +35,29 @@ if (
     die("Invalid listing action.");
 }
 
-require("../Model/db.php");
+require("../Model/Listing.php");
 
 $listerId = $_SESSION["user_id"];
 
-// Make sure this listing actually belongs to the logged-in lister.
-$ownSql = "SELECT id FROM listings WHERE id = ? AND lister_id = ?";
-$ownStmt = mysqli_prepare($conn, $ownSql);
-mysqli_stmt_bind_param($ownStmt, "ii", $listingId, $listerId);
-mysqli_stmt_execute($ownStmt);
-$ownResult = mysqli_stmt_get_result($ownStmt);
 
-if (mysqli_num_rows($ownResult) === 0) {
-    mysqli_stmt_close($ownStmt);
-    mysqli_close($conn);
+/* Check ownership */
+
+if (!checkListingOwner($listingId, $listerId)) {
     die("You do not have permission to modify this listing.");
 }
 
-mysqli_stmt_close($ownStmt);
+
+/* Delete or update */
 
 if ($action === "delete") {
 
-    $sql = "DELETE FROM listings WHERE id = ? AND lister_id = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ii", $listingId, $listerId);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    deleteListing($listingId, $listerId);
 
 } else {
 
-    $sql = "UPDATE listings SET status = ? WHERE id = ? AND lister_id = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sii", $action, $listingId, $listerId);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
-
+    updateListingStatus($listingId, $listerId, $action);
 }
 
-mysqli_close($conn);
 
 header("Location: ../View/lister/manage-listing.php");
 exit();

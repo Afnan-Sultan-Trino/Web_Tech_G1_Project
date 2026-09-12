@@ -1,26 +1,24 @@
 <?php
+
 session_start();
+
 if (!isset($_SESSION["logged_in"])) {
-    header("Location: ../common/login.html?error=login_required");
+    header("Location: ../View/common/login.html?error=login_required");
     exit();
 }
 
+require("../Model/User.php");
+
 $user_id = $_SESSION["user_id"];
+
 $name = $_SESSION["name"];
 $email = $_SESSION["email"];
 $role = $_SESSION["role"];
 
-// Phone number fetch korte hole database theke niye ashi
-require("../Model/db.php");
-$phone_sql = "SELECT phone FROM users WHERE id = ?";
-$phone_stmt = mysqli_prepare($conn, $phone_sql);
-mysqli_stmt_bind_param($phone_stmt, "i", $user_id);
-mysqli_stmt_execute($phone_stmt);
-$phone_result = mysqli_stmt_get_result($phone_stmt);
-$phone_row = mysqli_fetch_assoc($phone_result);
-$phone = $phone_row['phone'] ?? '';
-mysqli_stmt_close($phone_stmt);
-mysqli_close($conn);
+$phone = getUserPhone($user_id);
+
+require("../View/common/profile.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

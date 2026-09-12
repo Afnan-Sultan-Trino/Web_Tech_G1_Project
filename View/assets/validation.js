@@ -727,6 +727,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         alert("Please enter your password.");
 
+    } else if (error === "wrong_password") {
+
+        loginForm.reset();
+
+        alert("Incorrect password.");
+
+    } else if (error === "account_suspended") {
+
+        loginForm.reset();
+
+        alert("This account is suspended.");
+
+    } else if (error === "login_required") {
+
+        alert("Please log in to continue.");
+
     }
 
     if (error) {
