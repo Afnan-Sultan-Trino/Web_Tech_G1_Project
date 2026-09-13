@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     die("Invalid request.");
 }
 
-// Only a logged-in lister can post a listing.
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
     header("Location: ../View/common/login.html?error=login_required");
     exit();
@@ -100,16 +99,13 @@ if ($dotPosition === false) {
 
 $extension = strtolower(substr($imageName, $dotPosition + 1));
 
-if (
-    $extension !== "jpg" &&
+if ($extension !== "jpg" &&
     $extension !== "jpeg" &&
     $extension !== "png" &&
-    $extension !== "webp"
-) {
+    $extension !== "webp") {
     die("Only JPG, JPEG, PNG and WEBP images are allowed.");
 }
 
-// Save the uploaded image with a unique name so listings never overwrite each other.
 $uploadDir = "../View/Images/uploads/";
 $storedName = uniqid("listing_", true) . "." . $extension;
 
@@ -117,42 +113,19 @@ if (!move_uploaded_file($_FILES["image"]["tmp_name"], $uploadDir . $storedName))
     die("There was a problem uploading the image.");
 }
 
-require("../Model/db.php");
+require("../Model/Listing.php");
 
 $listerId = $_SESSION["user_id"];
 $title = $location . " - " . ucfirst($room) . " Room";
 
-$sql = "INSERT INTO listings (lister_id, title, location, room_type, description, price, contact, image, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param(
-    $stmt,
-    "issssdss",
-    $listerId,
-    $title,
-    $location,
-    $room,
-    $description,
-    $price,
-    $contact,
-    $storedName
-);
-
-if (mysqli_stmt_execute($stmt)) {
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
+if (insertListing($listerId, $title, $location, $room, $description, $price, $contact, $storedName)) {
 
     echo "<h2>Property Listing Submitted</h2>";
     echo "<p>Your listing has been saved and is pending approval.</p>";
     echo "<p><a href='../View/lister/manage-listing.php'>View my listings</a></p>";
 
 } else {
-    $error = mysqli_stmt_error($stmt);
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-
-    die("Failed to save listing: " . $error);
+    die("Failed to save listing.");
 }
 
 ?>

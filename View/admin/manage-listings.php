@@ -1,31 +1,18 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/Listing.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
     header("Location: ../common/login.html?error=login_required");
     exit();
 }
 
-$sql = "SELECT listings.*, users.name AS lister_name
-        FROM listings
-        JOIN users ON users.id = listings.lister_id
-        WHERE listings.status = 'pending'
-        ORDER BY listings.created_at DESC";
-$result = mysqli_query($conn, $sql);
-$listings = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_close($conn);
+$listings = getPendingListings();
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Manage Listings - CampusNest</title>
 
     <link rel="stylesheet" href="../assets/styles.css">

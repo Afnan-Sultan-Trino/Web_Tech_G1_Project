@@ -1,20 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>CampusNest - Student Housing</title>
-
-    <link rel="stylesheet" href="assets/styles.css">
-
+<title>CampusNest - Student Housing</title>
+<link rel="stylesheet" href="assets/styles.css">
 </head>
-
 <body>
-
-
 <header class="nest-topbar">
 
     <a href="index.php" class="nest-brand">

@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/Listing.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
     header("Location: ../common/login.html?error=login_required");
@@ -10,14 +10,7 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
 
 $listerId = $_SESSION["user_id"];
 
-$sql = "SELECT * FROM listings WHERE lister_id = ? ORDER BY created_at DESC";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $listerId);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$listings = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$listings = getListingsByLister($listerId);
 
 $badgeClass = [
     "available" => "badge-available",

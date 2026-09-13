@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/Listing.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
     header("Location: ../common/login.html?error=login_required");
@@ -10,17 +10,7 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
 
 $listingId = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
 
-$sql = "SELECT listings.*, users.name AS lister_name
-        FROM listings
-        JOIN users ON users.id = listings.lister_id
-        WHERE listings.id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $listingId);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$listing = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$listing = getListingWithLister($listingId);
 
 if (!$listing) {
     die("Listing not found.");
@@ -28,16 +18,10 @@ if (!$listing) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
+<title>Interest Request - CampusNest</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Interest Request - CampusNest</title>
-
-    <link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/styles.css">
 
 </head>
 

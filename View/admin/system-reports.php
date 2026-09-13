@@ -1,28 +1,20 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/Stats.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
     header("Location: ../common/login.html?error=login_required");
     exit();
 }
 
-$totalSeekers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM users WHERE role = 'seeker'"))["c"];
-$totalListers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM users WHERE role = 'lister'"))["c"];
-$activeListings = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM listings WHERE status = 'available'"))["c"];
-
-mysqli_close($conn);
+$totalSeekers = countUsersByRole("seeker");
+$totalListers = countUsersByRole("lister");
+$activeListings = countAvailableListings();
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>System Reports - CampusNest</title>
 
     <link rel="stylesheet" href="../assets/styles.css">
