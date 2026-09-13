@@ -128,7 +128,7 @@ function rejectListing($listingId)
     return mysqli_query($conn, $sql);
 }
 
-<?php 
+
 require 'dbConnect.php';
 
 function insertListing($listerId, $title, $location, $roomType, $description, $price, $contact, $image) {
