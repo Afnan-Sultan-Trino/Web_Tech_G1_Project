@@ -185,7 +185,7 @@ function updateReport($reportId, $action)
 
     return 0;
 }
-<?php 
+
 require 'dbConnect.php';
 
 function insertReport($reporterId, $reportedUserId, $listingId, $reason, $details) {
