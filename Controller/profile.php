@@ -7,6 +7,20 @@ if (!isset($_SESSION["logged_in"])) {
     exit();
 }
 
+<<<<<<< HEAD
+require("../Model/User.php");
+
+$user_id = $_SESSION["user_id"];
+
+$name = $_SESSION["name"];
+$email = $_SESSION["email"];
+$role = $_SESSION["role"];
+
+$phone = getUserPhone($user_id);
+
+require("../View/common/profile.php");
+
+=======
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../View/common/profile.php");
     exit();
@@ -40,4 +54,5 @@ if (updateUserProfile($userId, $name, $email, $phone)) {
     die("Failed to update profile.");
 }
 
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
 ?>

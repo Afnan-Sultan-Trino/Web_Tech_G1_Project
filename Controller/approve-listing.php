@@ -23,6 +23,7 @@ if (isset($_POST["action"])) {
     $action = "";
 }
 
+
 if (empty($listingId) || !ctype_digit((string) $listingId)) {
     die("Listing ID is required.");
 }
@@ -34,6 +35,22 @@ if (
     die("Invalid listing action.");
 }
 
+<<<<<<< HEAD
+
+require("../Model/Listing.php");
+
+
+if ($action === "approve") {
+
+    approveListing($listingId);
+
+} else {
+
+    rejectListing($listingId);
+}
+
+
+=======
 require("../Model/Listing.php");
 
 if ($action === "approve") {
@@ -42,6 +59,7 @@ if ($action === "approve") {
     rejectListing($listingId);
 }
 
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
 header("Location: ../View/admin/manage-listings.php");
 exit();
 
