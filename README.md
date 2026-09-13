@@ -46,7 +46,7 @@ of the sample accounts (all use the password `password123`):
 |--------|-----------------------|
 | Admin  | admin@campusnest.com  |
 | Lister | rakibul@example.com   |
-| Seeker | momi@example.com      |
+| Seeker | lia@example.com      |
 
 You can also register a brand new account from the Sign Up page — it will be
 saved for real in the `users` table now.
