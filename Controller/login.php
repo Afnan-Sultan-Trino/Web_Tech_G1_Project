@@ -25,16 +25,25 @@ if (empty($password)) {
     exit();
 }
 
+<<<<<<< HEAD
 
 // Get user from Model
 
 $user = loginUser($email);
 
 if ($user === false) {
+=======
+require("../Model/User.php");
+
+$user = getUserByEmail($email);
+
+if (!$user) {
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
     header("Location: ../View/common/login.html?error=email_not_found");
     exit();
 }
 
+<<<<<<< HEAD
 
 // Check password
 
@@ -42,13 +51,19 @@ if (
     !password_verify($password, $user["password"]) &&
     !hash_equals($user["password"], $password)
 ) {
+=======
+if ($password !== $user["password"]) {
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
     header("Location: ../View/common/login.html?error=wrong_password");
     exit();
 }
 
+<<<<<<< HEAD
 
 // Check account status
 
+=======
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
 if ($user["status"] === "suspended") {
     header("Location: ../View/common/login.html?error=account_suspended");
     exit();
@@ -76,9 +91,12 @@ if (isset($_POST["remember"])) {
     );
 }
 
+<<<<<<< HEAD
 
 // Redirect according to role
 
+=======
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
 if ($_SESSION["role"] === "lister") {
 
     header("Location: ../View/lister/lister-dashboard.php");

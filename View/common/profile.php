@@ -1,32 +1,20 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/User.php");
 
 if (!isset($_SESSION["logged_in"])) {
     header("Location: login.html?error=login_required");
     exit();
 }
 
-$sql = "SELECT * FROM users WHERE id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$user = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$user = getUserById($_SESSION["user_id"]);
 
 $success = isset($_GET["success"]);
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Account - CampusNest</title>
 
@@ -84,7 +72,6 @@ $success = isset($_GET["success"]);
             novalidate>
 
 
-            <!-- NAME -->
 
             <div class="nest-field">
 
@@ -101,7 +88,6 @@ $success = isset($_GET["success"]);
             </div>
 
 
-            <!-- EMAIL -->
 
             <div class="nest-field">
 
@@ -118,30 +104,20 @@ $success = isset($_GET["success"]);
             </div>
 
 
-            <!-- PHONE -->
 
             <div class="nest-field">
 
-                <label for="phone">
-                    Phone
-                </label>
+                <label for="phone"> Phone </label>
 
-                <input
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    value="<?php echo htmlspecialchars($user["phone"] ?? ""); ?>">
+                <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user["phone"] ?? ""); ?>">
 
             </div>
 
 
-            <!-- BUTTONS -->
 
             <div class="nest-actions">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary">
+                <button type="submit" class="btn btn-primary"> 
                     Save Changes
                 </button>
 
@@ -159,10 +135,67 @@ $success = isset($_GET["success"]);
 
     </div>
 
+
+    <div class="nest-card">
+
+        <h2 class="nest-card-title">
+            Refresh Profile Data
+        </h2>
+
+        
+
+        <button type="button" id="loadProfileBtn" class="btn btn-gold">
+            Load My Profile
+        </button>
+
+        <div id="profileData" style="margin-top: 15px;"></div>
+
+    </div>
+
+
+    <div class="nest-card">
+
+        <h2 class="nest-card-title">
+            Change Password
+        </h2>
+
+        
+
+        <form id="changePasswordForm" onsubmit="return submitPasswordChange(this)" novalidate>
+
+            <div class="nest-field">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password" required>
+            </div>
+
+            <div class="nest-field">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" name="newPassword" placeholder="New Password (min 6 chars)" required>
+            </div>
+
+            <div class="nest-field">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+
+            <div class="nest-actions">
+                <button type="submit" class="btn btn-primary">
+                    Update Password
+                </button>
+            </div>
+
+        </form>
+
+        <div id="passwordMessage" style="margin-top: 10px;"></div>
+
+    </div>
+
 </div>
 
 
 <script src="../assets/validation.js"></script>
+
+<script src="profile-ajax.js"></script>
 
 </body>
 </html>

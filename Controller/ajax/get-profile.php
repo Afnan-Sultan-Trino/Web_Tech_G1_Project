@@ -1,28 +1,26 @@
 <?php
+
 session_start();
-header('Content-Type: application/json');
 
-if (!isset($_SESSION["logged_in"])) {
-    echo json_encode(['error' => 'Unauthorized']);
-    exit();
+require '../../Model/User.php';
+
+if (!isset($_SESSION['logged_in'])) {
+	echo "Unauthorized";
+	exit();
 }
 
-require(__DIR__ . "/../../Model/db.php");
+$user = getUserById($_SESSION['user_id']);
 
-$userId = $_SESSION['user_id'];
-
-$sql = "SELECT id, name, email, phone, role FROM users WHERE id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $userId);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-if ($row = mysqli_fetch_assoc($result)) {
-    echo json_encode(['success' => true, 'user' => $row]);
-} else {
-    echo json_encode(['error' => 'User not found']);
+if ($user) {
+	echo "<div style=\"background:#f5f5f5; padding:15px; border-radius:5px;\">"
+		. "<p><strong>Name:</strong> " . htmlspecialchars($user['name']) . "</p>"
+		. "<p><strong>Email:</strong> " . htmlspecialchars($user['email']) . "</p>"
+		. "<p><strong>Phone:</strong> " . htmlspecialchars(!empty($user['phone']) ? $user['phone'] : 'Not provided') . "</p>"
+		. "<p><strong>Role:</strong> " . htmlspecialchars($user['role']) . "</p>"
+		. "</div>";
+}
+else {
+	echo "<p style=\"color:#c0392b;\">User not found</p>";
 }
 
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
 ?>

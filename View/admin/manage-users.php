@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/User.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
     header("Location: ../common/login.html?error=login_required");
@@ -10,31 +10,11 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
 
 $search = isset($_GET["search"]) ? trim($_GET["search"]) : "";
 
-if ($search !== "") {
-    $like = "%" . $search . "%";
-    $sql = "SELECT * FROM users WHERE role != 'admin' AND (name LIKE ? OR email LIKE ?) ORDER BY created_at DESC";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $like, $like);
-} else {
-    $sql = "SELECT * FROM users WHERE role != 'admin' ORDER BY created_at DESC";
-    $stmt = mysqli_prepare($conn, $sql);
-}
-
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$users = getAllUsers($search);
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Manage Users - CampusNest</title>
 
     <link rel="stylesheet" href="../assets/styles.css">

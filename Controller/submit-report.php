@@ -88,6 +88,17 @@ if (submitReport(
     $details
 )) {
 
+require("../Model/Report.php");
+
+$reporterId = $_SESSION["user_id"];
+
+if ((int) $reportedUserId === (int) $reporterId) {
+    die("You cannot report yourself.");
+}
+
+if (insertReport($reporterId, $reportedUserId, $listingId, $reason, $details)) {
+
+
     echo "<h2>Report Submitted</h2>";
 
     echo "<p>Thanks — an admin will review this listing shortly.</p>";
@@ -100,8 +111,11 @@ if (submitReport(
 
 } else {
 
+
+    die("Failed to submit report.");
+
     die("Failed to submit report.");
 
 }
-
+}
 ?>

@@ -1,31 +1,18 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/Report.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
     header("Location: ../common/login.html?error=login_required");
     exit();
 }
 
-$sql = "SELECT reports.*, reporter.name AS reporter_name, reported.name AS reported_name
-        FROM reports
-        JOIN users AS reporter ON reporter.id = reports.reporter_id
-        LEFT JOIN users AS reported ON reported.id = reports.reported_user_id
-        WHERE reports.status = 'open'
-        ORDER BY reports.created_at DESC";
-$result = mysqli_query($conn, $sql);
-$reports = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_close($conn);
+$reports = getOpenReports();
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Manage Reports - CampusNest</title>
 

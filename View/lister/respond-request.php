@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require("../../Model/db.php");
+require("../../Model/InterestRequest.php");
 
 if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
     header("Location: ../common/login.html?error=login_required");
@@ -10,20 +10,7 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
 
 $listerId = $_SESSION["user_id"];
 
-$sql = "SELECT interest_requests.*, listings.title AS listing_title,
-               users.name AS seeker_name
-        FROM interest_requests
-        JOIN listings ON listings.id = interest_requests.listing_id
-        JOIN users ON users.id = interest_requests.seeker_id
-        WHERE listings.lister_id = ? AND interest_requests.status = 'pending'
-        ORDER BY interest_requests.created_at DESC";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $listerId);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$requests = getPendingRequestsForLister($listerId);
 
 ?>
 <!DOCTYPE html>

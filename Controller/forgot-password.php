@@ -48,26 +48,13 @@ if ($dotPosition === strlen($email) - 1) {
     die("Email cannot end with a dot.");
 }
 
-require("../Model/db.php");
+require("../Model/User.php");
 
-$sql = "SELECT id FROM users WHERE email = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "s", $email);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$found = mysqli_num_rows($result) > 0;
-
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$found = emailExists($email);
 
 echo "<h2>Password Reset Request</h2>";
 
-// Don't reveal whether the email exists - just say a link would be sent either way.
 echo "<p>If an account with that email exists, a password reset link has been sent.</p>";
 
-if ($found) {
-    // In a real deployment this is where you would generate a reset
-    // token, save it against the user, and email a reset link.
-}
 
 ?>

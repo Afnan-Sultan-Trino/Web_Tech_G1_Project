@@ -35,6 +35,7 @@ if (
     die("Invalid listing action.");
 }
 
+<<<<<<< HEAD
 
 require("../Model/Listing.php");
 
@@ -49,6 +50,16 @@ if ($action === "approve") {
 }
 
 
+=======
+require("../Model/Listing.php");
+
+if ($action === "approve") {
+    approveListing($listingId);
+} else {
+    rejectListing($listingId);
+}
+
+>>>>>>> 2f6f798ea5c5d0c92aaf999052bc71a41a9c4993
 header("Location: ../View/admin/manage-listings.php");
 exit();
 
