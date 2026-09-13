@@ -25,13 +25,13 @@ mysql -u root -p < schema.sql
 
 ## 3. Check your DB credentials
 
-Open `Model/db.php`. By default it assumes the typical XAMPP setup:
+Open `Model/dbConnect.php`. By default it assumes the typical XAMPP setup:
 
 ```php
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$dbname     = "campusnest";
+function connect() {
+    $conn = mysqli_connect("localhost", "root", "", "campusnest");
+    ...
+}
 ```
 
 If your MySQL root user has a password, or you used a different database

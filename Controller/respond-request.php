@@ -34,24 +34,12 @@ if (
     die("Invalid request action.");
 }
 
-require("../Model/db.php");
+require("../Model/InterestRequest.php");
 
 $listerId = $_SESSION["user_id"];
 $newStatus = $action === "approve" ? "approved" : "declined";
 
-// Only allow a lister to respond to requests made on their own listings.
-$sql = "UPDATE interest_requests
-        JOIN listings ON listings.id = interest_requests.listing_id
-        SET interest_requests.status = ?
-        WHERE interest_requests.id = ? AND listings.lister_id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "sii", $newStatus, $requestId, $listerId);
-mysqli_stmt_execute($stmt);
-$affected = mysqli_stmt_affected_rows($stmt);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
-
-if ($affected === 0) {
+if (!respondToRequestForLister($requestId, $listerId, $newStatus)) {
     die("You do not have permission to update this request.");
 }
 

@@ -1,83 +1,59 @@
 <?php
-session_start();
-header('Content-Type: application/json');
 
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
-    echo json_encode(['error' => 'Unauthorized']);
-    exit();
+session_start();
+
+require '../../Model/Listing.php';
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'seeker') {
+	echo "<p style=\"color:#c0392b;\">Unauthorized</p>";
+	exit();
 }
 
-// Get filter parameters
 $location = isset($_GET['location']) ? trim($_GET['location']) : '';
 $roomDetails = isset($_GET['room_details']) ? explode(',', $_GET['room_details']) : [];
 $priceRange = isset($_GET['price']) ? trim($_GET['price']) : '';
 
-require(__DIR__ . "/../../Model/db.php");
+$minPrice = null;
+$maxPrice = null;
 
-// Base query
-$sql = "SELECT id, title, location, room_type, description, price, contact, image, status, created_at 
-        FROM listings 
-        WHERE status = 'available'";
-
-$params = [];
-$types = "";
-
-// Add location filter
-if (!empty($location)) {
-    $sql .= " AND location = ?";
-    $types .= "s";
-    $params[] = $location;
-}
-
-// Add room details filter (matches room_type column)
-if (!empty($roomDetails)) {
-    $placeholders = [];
-    foreach ($roomDetails as $detail) {
-        $placeholders[] = "?";
-        $types .= "s";
-        $params[] = $detail;
-    }
-    $sql .= " AND room_type IN (" . implode(",", $placeholders) . ")";
-}
-
-// Add price range filter
 if (!empty($priceRange)) {
-    $rangeParts = explode("-", $priceRange);
-    if (count($rangeParts) === 2) {
-        $minPrice = (int)$rangeParts[0];
-        $maxPrice = (int)$rangeParts[1];
-        $sql .= " AND price BETWEEN ? AND ?";
-        $types .= "ii";
-        $params[] = $minPrice;
-        $params[] = $maxPrice;
-    }
+	$rangeParts = explode("-", $priceRange);
+	if (count($rangeParts) === 2) {
+		$minPrice = (int) $rangeParts[0];
+		$maxPrice = (int) $rangeParts[1];
+	}
 }
 
-$sql .= " ORDER BY created_at DESC LIMIT 20";
+$listings = filterListings($location, $roomDetails, $minPrice, $maxPrice);
 
-// Prepare and execute
-$stmt = mysqli_prepare($conn, $sql);
-if (!$stmt) {
-    echo json_encode(['error' => 'Database error']);
-    mysqli_close($conn);
-    exit();
+if (count($listings) === 0) {
+	echo "<div class=\"no-results\">No listings found matching your criteria.</div>";
+	exit();
 }
 
-// Bind parameters if any
-if (!empty($params)) {
-    mysqli_stmt_bind_param($stmt, $types, ...$params);
+echo "<div class=\"results-count\">Found <strong>" . count($listings) . "</strong> listing(s)</div>";
+
+foreach ($listings as $listing) {
+
+	$statusClass = $listing['status'] === 'available' ? 'Available' :   htmlspecialchars($listing['status']);
+
+	echo "<div class=\"listing-item\">";
+	echo "<h3>" . htmlspecialchars($listing['title']) . "</h3>";
+	echo "<p class=\"location\">" . htmlspecialchars($listing['location']) . "</p>";
+
+	if (!empty($listing['description'])) {
+		echo "<p>" . htmlspecialchars($listing['description']) . "</p>";
+	}
+
+	echo "<p class=\"price\">" . htmlspecialchars($listing['price']) . " BDT</p>";
+
+	if (!empty($listing['contact'])) {
+		echo "<p>" . htmlspecialchars($listing['contact']) . "</p>";
+	}
+
+	echo "<p class=\"status\">Status: " . $statusClass . "</p>";
+	echo "<a href=\"interest-request.php?id=" . (int) $listing['id'] . "\" class=\"btn btn-primary\">View</a>";
+	echo "</div>";
 }
 
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-$listings = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $listings[] = $row;
-}
-
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
-
-echo json_encode(['results' => $listings]);
 ?>

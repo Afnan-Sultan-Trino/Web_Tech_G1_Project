@@ -20,39 +20,21 @@ if (empty($password)) {
     exit();
 }
 
-require("../Model/db.php");
+require("../Model/User.php");
 
-$sql = "SELECT * FROM users WHERE email = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "s", $email);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+$user = getUserByEmail($email);
 
-if (mysqli_num_rows($result) === 0) {
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-
+if (!$user) {
     header("Location: ../View/common/login.html?error=email_not_found");
     exit();
 }
 
-$user = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
-
 if ($password !== $user["password"]) {
- 
-    mysqli_close($conn);
- 
     header("Location: ../View/common/login.html?error=wrong_password");
     exit();
 }
 
-
 if ($user["status"] === "suspended") {
-
-    mysqli_close($conn);
-
     header("Location: ../View/common/login.html?error=account_suspended");
     exit();
 }
@@ -72,8 +54,6 @@ if (isset($_POST["remember"])) {
         "/"
     );
 }
-
-mysqli_close($conn);
 
 if ($_SESSION["role"] === "lister") {
 

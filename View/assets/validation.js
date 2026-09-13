@@ -30,9 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
 
-            /* =====================================
-               NORMAL TEXT INPUTS
-               ===================================== */
 
             allFields.forEach(function (field) {
 
@@ -59,9 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
 
-            /* =====================================
-               SELECT VALIDATION
-               ===================================== */
 
             const selects =
                 form.querySelectorAll("select");
@@ -85,9 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
 
-            /* =====================================
-               EMAIL
-               ===================================== */
 
             const email =
                 form.querySelector(
@@ -210,9 +201,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               CONFIRM PASSWORD
-               ===================================== */
 
             const confirm =
                 form.querySelector(
@@ -240,9 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               NAME
-               ===================================== */
 
             const name =
                 form.querySelector(
@@ -267,10 +252,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
-
-            /* =====================================
-               PHONE / CONTACT
-               ===================================== */
 
             const phone =
                 form.querySelector(
@@ -301,9 +282,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               PRICE
-               ===================================== */
 
             const price =
                 form.querySelector(
@@ -330,9 +308,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               LOCATION
-               ===================================== */
 
             const location =
                 form.querySelector(
@@ -358,9 +333,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               DESCRIPTION
-               ===================================== */
 
             const description =
                 form.querySelector(
@@ -385,10 +357,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
-
-            /* =====================================
-               SEARCH FILTER
-               ===================================== */
 
             const roomDetails =
                 form.querySelectorAll(
@@ -424,10 +392,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               ROOM TYPE
-               ===================================== */
-
             const roomTypes =
                 form.querySelectorAll(
                     'input[name="room"]'
@@ -461,10 +425,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
-
-            /* =====================================
-               ROLE
-               ===================================== */
 
             const roles =
                 form.querySelectorAll(
@@ -500,10 +460,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               REPORT TYPE
-               ===================================== */
-
             const reportType =
                 form.querySelector(
                     'select[name="report_type"]'
@@ -526,10 +482,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 valid = false;
             }
 
-
-            /* =====================================
-               DATE RANGE
-               ===================================== */
 
             const fromDate =
                 form.querySelector(
@@ -564,10 +516,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               MESSAGE
-               ===================================== */
-
             const message =
                 form.querySelector(
                     'textarea[name="message"]'
@@ -592,10 +540,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
-
-            /* =====================================
-               IMAGE
-               ===================================== */
 
             const image =
                 form.querySelector(
@@ -644,9 +588,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* =====================================
-               STOP SUBMISSION
-               ===================================== */
 
             if (!valid) {
 
@@ -659,9 +600,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    /* =====================================
-       SHOW ERROR
-       ===================================== */
 
     function showError(field, message) {
 

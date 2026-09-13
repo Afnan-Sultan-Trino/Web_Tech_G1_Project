@@ -32,51 +32,13 @@ if (empty($price)) {
     die("Please select a price range.");
 }
 
-if (empty($roomDetails)) {
-    die("Please select at least one room detail.");
-}
-
-// The price field comes in as "min-max", e.g. "8000-10000".
 $priceParts = explode("-", $price);
 $minPrice = isset($priceParts[0]) ? (float) $priceParts[0] : 0;
 $maxPrice = isset($priceParts[1]) ? (float) $priceParts[1] : 999999999;
 
-require("../Model/db.php");
+require("../Model/Listing.php");
 
-// Build a dynamic "room_type IN (?, ?, ...)" clause matching the checked boxes.
-$placeholders = implode(",", array_fill(0, count($roomDetails), "?"));
-
-$sql = "SELECT listings.*, users.name AS lister_name
-        FROM listings
-        JOIN users ON users.id = listings.lister_id
-        WHERE listings.status = 'available'
-          AND listings.location = ?
-          AND listings.price BETWEEN ? AND ?
-          AND listings.room_type IN ($placeholders)
-        ORDER BY listings.created_at DESC";
-
-$stmt = mysqli_prepare($conn, $sql);
-
-$types = "sdd" . str_repeat("s", count($roomDetails));
-$bindParams = [$stmt, $types, $location, $minPrice, $maxPrice];
-
-foreach ($roomDetails as $detail) {
-    $bindParams[] = $detail;
-}
-
-// Build references (mysqli_stmt_bind_param requires variables, not values).
-$refs = [];
-foreach ($bindParams as $key => $value) {
-    $refs[$key] = &$bindParams[$key];
-}
-
-call_user_func_array("mysqli_stmt_bind_param", $refs);
-
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$listings = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_stmt_close($stmt);
-mysqli_close($conn);
+$listings = searchAvailableListings($location, $minPrice, $maxPrice, $roomDetails);
 
 ?>
 <!DOCTYPE html>

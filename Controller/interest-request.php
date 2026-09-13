@@ -49,44 +49,23 @@ if (!preg_match("/^[0-9]{11}$/", $phone)) {
     die("Phone number must contain exactly 11 digits.");
 }
 
-require("../Model/db.php");
+require("../Model/Listing.php");
+require("../Model/InterestRequest.php");
 
 $seekerId = $_SESSION["user_id"];
 
-$checkSql = "SELECT id FROM listings WHERE id = ?";
-$checkStmt = mysqli_prepare($conn, $checkSql);
-mysqli_stmt_bind_param($checkStmt, "i", $listingId);
-mysqli_stmt_execute($checkStmt);
-$checkResult = mysqli_stmt_get_result($checkStmt);
-
-if (mysqli_num_rows($checkResult) === 0) {
-    mysqli_stmt_close($checkStmt);
-    mysqli_close($conn);
+if (!listingExists($listingId)) {
     die("That listing no longer exists.");
 }
 
-mysqli_stmt_close($checkStmt);
-
-$sql = "INSERT INTO interest_requests (listing_id, seeker_id, message, phone, status)
-        VALUES (?, ?, ?, ?, 'pending')";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "iiss", $listingId, $seekerId, $message, $phone);
-
-if (mysqli_stmt_execute($stmt)) {
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
+if (insertInterestRequest($listingId, $seekerId, $message, $phone)) {
 
     echo "<h2>Interest Request Submitted</h2>";
     echo "<p>Your request has been sent to the lister.</p>";
     echo "<p><a href='../View/seeker/seeker-dashboard.php'>Back to dashboard</a></p>";
 
 } else {
-    $error = mysqli_stmt_error($stmt);
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-
-    die("Failed to submit request: " . $error);
+    die("Failed to submit request.");
 }
 
 ?>
