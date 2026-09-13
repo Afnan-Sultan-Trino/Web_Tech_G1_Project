@@ -61,7 +61,7 @@ function submitInterestRequest($listingId, $seekerId, $message, $phone)
 }
 
 
-<?php 
+
 require 'dbConnect.php';
 
 function insertInterestRequest($listingId, $seekerId, $message, $phone) {
