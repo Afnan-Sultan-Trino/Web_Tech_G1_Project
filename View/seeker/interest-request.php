@@ -1,19 +1,15 @@
 <?php
 
 session_start();
-require("../../Model/Listing.php");
 
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
-    header("Location: ../common/login.html?error=login_required");
-    exit();
-}
+$isAuthorized = isset($_SESSION["logged_in"]) && $_SESSION["role"] === "seeker";
+$hasData = isset($_SESSION["interestRequestData"]);
 
-$listingId = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
+$listing = null;
 
-$listing = getListingWithLister($listingId);
-
-if (!$listing) {
-    die("Listing not found.");
+if ($isAuthorized && $hasData) {
+    $listing = $_SESSION["interestRequestData"];
+    unset($_SESSION["interestRequestData"]);
 }
 
 ?>
@@ -26,6 +22,26 @@ if (!$listing) {
 </head>
 
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in as a seeker to view this page.</p>
+        <a href="../common/login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php elseif (!$hasData || !$listing): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>That listing could not be found, or this page was opened directly. Please search again.</p>
+        <a href="seeker-dashboard.php" class="btn btn-primary">Go to dashboard</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 
 <header class="nest-topbar">
@@ -222,6 +238,9 @@ if (!$listing) {
     </div>
 
 </main>
+
+<?php endif; ?>
+
 <script src="../assets/validation.js"></script>
 
 </body>

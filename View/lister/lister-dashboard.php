@@ -1,9 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
-    header("Location: ../common/login.html?error=login_required");
-    exit();
-}
+$isAuthorized = isset($_SESSION["logged_in"]) && $_SESSION["role"] === "lister";
 ?>
 <!DOCTYPE html>
 <head>
@@ -11,6 +8,17 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
     <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in as a lister to view this page.</p>
+        <a href="../common/login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 <header class="nest-topbar">
     <a href="../index.php" class="nest-brand">CampusNest</a>
@@ -32,22 +40,24 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
         <div class="nest-card">
             <h2 class="nest-card-title">Manage Listings</h2>
             <p>Edit, mark occupied, or delete your listings.</p>
-            <a href="manage-listing.php" class="btn btn-primary">Manage Listings</a>
+            <a href="../../Controller/view-manage-listing.php" class="btn btn-primary">Manage Listings</a>
         </div>
 
         <div class="nest-card">
             <h2 class="nest-card-title">Pending Requests</h2>
             <p>Review and respond to interested students.</p>
-            <a href="respond-request.php" class="btn btn-primary">View Requests</a>
+            <a href="../../Controller/view-respond-request.php" class="btn btn-primary">View Requests</a>
         </div>
 
         <div class="nest-card">
             <h2 class="nest-card-title">My Account</h2>
-            <a href="../common/profile.php" class="btn btn-ghost">View Profile</a>
+            <a href="../../Controller/view-profile.php" class="btn btn-ghost">View Profile</a>
         </div>
 
     </div>
 </main>
+
+<?php endif; ?>
 
 </body>
 </html>

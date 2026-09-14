@@ -8,7 +8,7 @@ if (!isset($_SESSION["logged_in"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: ../View/common/profile.php");
+    header("Location: view-profile.php");
     exit();
 }
 
@@ -33,7 +33,7 @@ if (updateUserProfile($userId, $name, $email, $phone)) {
     $_SESSION["name"] = $name;
     $_SESSION["email"] = $email;
 
-    header("Location: ../View/common/profile.php?success=1");
+    header("Location: view-profile.php?success=1");
     exit();
 
 } else {

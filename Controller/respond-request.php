@@ -43,7 +43,7 @@ if (!respondToRequestForLister($requestId, $listerId, $newStatus)) {
     die("You do not have permission to update this request.");
 }
 
-header("Location: ../View/lister/respond-request.php");
+header("Location: view-respond-request.php");
 exit();
 
 ?>

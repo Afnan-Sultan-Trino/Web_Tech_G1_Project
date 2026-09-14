@@ -1,16 +1,16 @@
 <?php
 
 session_start();
-require("../../Model/Listing.php");
 
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "lister") {
-    header("Location: ../common/login.html?error=login_required");
-    exit();
+$isAuthorized = isset($_SESSION["logged_in"]) && $_SESSION["role"] === "lister";
+$hasData = isset($_SESSION["manageListingData"]);
+
+$listings = [];
+
+if ($isAuthorized && $hasData) {
+    $listings = $_SESSION["manageListingData"];
+    unset($_SESSION["manageListingData"]);
 }
-
-$listerId = $_SESSION["user_id"];
-
-$listings = getListingsByLister($listerId);
 
 $badgeClass = [
     "available" => "badge-available",
@@ -35,6 +35,26 @@ $badgeClass = [
 </head>
 
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in as a lister to view this page.</p>
+        <a href="../common/login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php elseif (!$hasData): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>Please open this page from the lister dashboard.</p>
+        <a href="lister-dashboard.php" class="btn btn-primary">Go to dashboard</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 
 <header class="nest-topbar">
@@ -146,6 +166,8 @@ $badgeClass = [
     <?php endif; ?>
 
 </div>
+
+<?php endif; ?>
 
 <script src="../assets/validation.js"></script>
 </body>

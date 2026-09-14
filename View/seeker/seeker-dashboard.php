@@ -1,9 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
-    header("Location: ../common/login.html?error=login_required");
-    exit();
-}
+$isAuthorized = isset($_SESSION["logged_in"]) && $_SESSION["role"] === "seeker";
 ?>
 <!DOCTYPE html>
 <head>
@@ -11,6 +8,17 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
     <link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in as a seeker to view this page.</p>
+        <a href="../common/login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 <header class="nest-topbar">
     <a href="../index.php" class="nest-brand">CampusNest</a>
@@ -32,11 +40,13 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "seeker") {
         <div class="nest-card">
             <h2 class="nest-card-title">My Account</h2>
             <p>Update your name, email and phone number.</p>
-            <a href="../common/profile.php" class="btn btn-ghost">View Profile</a>
+            <a href="../../Controller/view-profile.php" class="btn btn-ghost">View Profile</a>
         </div>
 
     </div>
 </main>
+
+<?php endif; ?>
 
 </body>
 </html>

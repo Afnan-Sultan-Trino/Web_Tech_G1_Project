@@ -111,7 +111,7 @@ $listings = searchAvailableListings($location, $minPrice, $maxPrice, $roomDetail
                     </dl>
 
                     <div class="nest-actions">
-                        <a href="../View/seeker/interest-request.php?id=<?php echo $listing["id"]; ?>" class="btn btn-primary">
+                        <a href="view-interest-request.php?id=<?php echo $listing["id"]; ?>" class="btn btn-primary">
                             Express Interest
                         </a>
                     </div>

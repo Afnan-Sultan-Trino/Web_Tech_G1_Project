@@ -51,7 +51,7 @@ if ($action === "remove") {
 
 updateReportStatus($reportId, $newStatus);
 
-header("Location: ../View/admin/reports.php");
+header("Location: view-reports.php");
 exit();
 
 ?>

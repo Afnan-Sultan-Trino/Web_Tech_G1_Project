@@ -1,16 +1,20 @@
 <?php
 
 session_start();
-require("../../Model/Stats.php");
 
-if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== "admin") {
-    header("Location: ../common/login.html?error=login_required");
-    exit();
+$isAuthorized = isset($_SESSION["logged_in"]) && $_SESSION["role"] === "admin";
+$hasData = isset($_SESSION["systemReportsData"]);
+
+$totalSeekers = 0;
+$totalListers = 0;
+$activeListings = 0;
+
+if ($isAuthorized && $hasData) {
+    $totalSeekers = $_SESSION["systemReportsData"]["totalSeekers"];
+    $totalListers = $_SESSION["systemReportsData"]["totalListers"];
+    $activeListings = $_SESSION["systemReportsData"]["activeListings"];
+    unset($_SESSION["systemReportsData"]);
 }
-
-$totalSeekers = countUsersByRole("seeker");
-$totalListers = countUsersByRole("lister");
-$activeListings = countAvailableListings();
 
 ?>
 <!DOCTYPE html>
@@ -22,6 +26,26 @@ $activeListings = countAvailableListings();
 </head>
 
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in as an admin to view this page.</p>
+        <a href="../common/login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php elseif (!$hasData): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>Please open this page from the admin dashboard.</p>
+        <a href="admin-dashboard.php" class="btn btn-primary">Go to dashboard</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 
 <header class="nest-topbar">
@@ -115,6 +139,8 @@ $activeListings = countAvailableListings();
     </div>
 
 </div>
+
+<?php endif; ?>
 
 <script src="../assets/validation.js"></script>
 </body>

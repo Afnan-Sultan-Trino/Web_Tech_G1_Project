@@ -42,7 +42,7 @@ if ($action === "delete") {
     updateUserStatus($userId, $newStatus);
 }
 
-header("Location: ../View/admin/manage-users.php");
+header("Location: view-manage-users.php");
 exit();
 
 ?>

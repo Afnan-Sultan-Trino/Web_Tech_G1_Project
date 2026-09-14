@@ -47,7 +47,7 @@ if (!$ok) {
     die("You do not have permission to modify this listing.");
 }
 
-header("Location: ../View/lister/manage-listing.php");
+header("Location: view-manage-listing.php");
 exit();
 
 ?>

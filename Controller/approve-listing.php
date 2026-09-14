@@ -42,7 +42,7 @@ if ($action === "approve") {
     rejectListing($listingId);
 }
 
-header("Location: ../View/admin/manage-listings.php");
+header("Location: view-manage-listings.php");
 exit();
 
 ?>

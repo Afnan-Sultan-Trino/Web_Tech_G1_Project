@@ -106,6 +106,6 @@ if ($reportType === "Active Listings") {
     echo "</ul>";
 }
 
-echo "<p><a href='../View/admin/system-reports.php'>Back to reports</a></p>";
+echo "<p><a href='view-system-reports.php'>Back to reports</a></p>";
 
 ?>

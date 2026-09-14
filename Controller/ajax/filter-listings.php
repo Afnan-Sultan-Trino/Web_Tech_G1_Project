@@ -52,7 +52,7 @@ foreach ($listings as $listing) {
 	}
 
 	echo "<p class=\"status\">Status: " . $statusClass . "</p>";
-	echo "<a href=\"interest-request.php?id=" . (int) $listing['id'] . "\" class=\"btn btn-primary\">View</a>";
+	echo "<a href=\"../../Controller/view-interest-request.php?id=" . (int) $listing['id'] . "\" class=\"btn btn-primary\">View</a>";
 	echo "</div>";
 }
 

@@ -122,7 +122,7 @@ if (insertListing($listerId, $title, $location, $room, $description, $price, $co
 
     echo "<h2>Property Listing Submitted</h2>";
     echo "<p>Your listing has been saved and is pending approval.</p>";
-    echo "<p><a href='../View/lister/manage-listing.php'>View my listings</a></p>";
+    echo "<p><a href='view-manage-listing.php'>View my listings</a></p>";
 
 } else {
     die("Failed to save listing.");

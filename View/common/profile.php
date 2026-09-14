@@ -1,14 +1,16 @@
 <?php
 
 session_start();
-require("../../Model/User.php");
 
-if (!isset($_SESSION["logged_in"])) {
-    header("Location: login.html?error=login_required");
-    exit();
+$isAuthorized = isset($_SESSION["logged_in"]);
+$hasData = isset($_SESSION["profileData"]);
+
+$user = null;
+
+if ($isAuthorized && $hasData) {
+    $user = $_SESSION["profileData"];
+    unset($_SESSION["profileData"]);
 }
-
-$user = getUserById($_SESSION["user_id"]);
 
 $success = isset($_GET["success"]);
 
@@ -23,6 +25,26 @@ $success = isset($_GET["success"]);
 </head>
 
 <body>
+
+<?php if (!$isAuthorized): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>You must be logged in to view this page.</p>
+        <a href="login.html" class="btn btn-primary">Go to login</a>
+    </div>
+</div>
+
+<?php elseif (!$hasData): ?>
+
+<div class="nest-shell">
+    <div class="nest-card">
+        <p>Please open this page from your dashboard.</p>
+        <a href="../../Controller/view-profile.php" class="btn btn-primary">Reload profile</a>
+    </div>
+</div>
+
+<?php else: ?>
 
 
 <header class="nest-topbar">
@@ -192,6 +214,7 @@ $success = isset($_GET["success"]);
 
 </div>
 
+<?php endif; ?>
 
 <script src="../assets/validation.js"></script>
 
